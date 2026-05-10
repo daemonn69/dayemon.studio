@@ -22,7 +22,7 @@ export const contacts = [
   {
     label: 'Email',
     value: 'dayemtwitter1@gmail.com',
-    href: 'mailto:dayemtwitter1@gmail.com',
+    href: 'https://mail.google.com/mail/?view=cm&fs=1&to=dayemtwitter1@gmail.com',
     icon: Mail,
   },
 ]
