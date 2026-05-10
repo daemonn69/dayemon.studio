@@ -9,7 +9,6 @@ import {
   ContactShadows,
 } from '@react-three/drei'
 import * as THREE from 'three'
-
 const MODEL_URL = '/models/character.glb'
 
 // ===== Blender-style toon outline =====
@@ -112,58 +111,72 @@ function Loader() {
 
 export default function CharacterScene() {
   const [interacting, setInteracting] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const containerRef = useRef(null)
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
+  // Останавливаем рендер когда сцена не видна
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.01 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <div style={{ width: '100%', height: '100%', touchAction: 'none' }}>
-    <Canvas
-      shadows={!isMobile}
-      dpr={isMobile ? [1, 1.5] : [1, 2]}
-      camera={{ position: [0, 0.5, 6], fov: 38 }}
-      gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
-      frameloop="demand"
-    >
-      <ambientLight intensity={0.8} />
-      <directionalLight
-        position={[4, 6, 4]}
-        intensity={1.5}
-        castShadow={!isMobile}
-        shadow-mapSize-width={512}
-        shadow-mapSize-height={512}
-      />
-      <directionalLight position={[-3, 2, -2]} intensity={0.5} color="#ffb4d9" />
-      {!isMobile && <pointLight position={[0, 4, 0]} intensity={0.3} color="#b57bff" />}
-
-      <Suspense fallback={<Loader />}>
-        <Float speed={1.1} rotationIntensity={0.08} floatIntensity={0.2}>
-          <CharacterGLB />
-        </Float>
-        <ContactShadows
-          position={[0, -1.9, 0]}
-          opacity={isMobile ? 0.2 : 0.35}
-          scale={8}
-          blur={isMobile ? 1.5 : 2.6}
-          far={3}
-          color="#1b1230"
+    <div ref={containerRef} style={{ width: '100%', height: '100%', touchAction: 'none' }}>
+      <Canvas
+        shadows={!isMobile}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        camera={{ position: [0, 0.5, 6], fov: 38 }}
+        gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
+        frameloop={visible ? 'always' : 'never'}
+      >
+        <ambientLight intensity={0.8} />
+        <directionalLight
+          position={[4, 6, 4]}
+          intensity={1.5}
+          castShadow={!isMobile}
+          shadow-mapSize-width={512}
+          shadow-mapSize-height={512}
         />
-        <Environment preset="city" />
-      </Suspense>
+        <directionalLight position={[-3, 2, -2]} intensity={0.5} color="#ffb4d9" />
+        {!isMobile && <pointLight position={[0, 4, 0]} intensity={0.3} color="#b57bff" />}
 
-      <OrbitControls
-        makeDefault
-        enablePan={false}
-        enableZoom={false}
-        minPolarAngle={Math.PI / 2.8}
-        maxPolarAngle={Math.PI / 1.75}
-        autoRotate={!interacting}
-        autoRotateSpeed={0.8}
-        onStart={() => setInteracting(true)}
-        onEnd={() => setInteracting(false)}
-        enableDamping
-        dampingFactor={0.05}
-        rotateSpeed={0.8}
-      />
-    </Canvas>
+        <Suspense fallback={<Loader />}>
+          <Float speed={1.1} rotationIntensity={0.08} floatIntensity={0.2}>
+            <CharacterGLB />
+          </Float>
+          <ContactShadows
+            position={[0, -1.9, 0]}
+            opacity={isMobile ? 0.2 : 0.35}
+            scale={8}
+            blur={isMobile ? 1.5 : 2.6}
+            far={3}
+            color="#1b1230"
+          />
+          <Environment preset="city" />
+        </Suspense>
+
+        <OrbitControls
+          makeDefault
+          enablePan={false}
+          enableZoom={false}
+          minPolarAngle={Math.PI / 2.8}
+          maxPolarAngle={Math.PI / 1.75}
+          autoRotate={!interacting}
+          autoRotateSpeed={0.8}
+          onStart={() => setInteracting(true)}
+          onEnd={() => setInteracting(false)}
+          enableDamping
+          dampingFactor={0.05}
+          rotateSpeed={0.8}
+        />
+      </Canvas>
     </div>
   )
 }
