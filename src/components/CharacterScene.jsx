@@ -119,7 +119,6 @@ export default function CharacterScene() {
       dpr={[1, 2]}
       camera={{ position: [0, 0.5, 6], fov: 38 }}
       gl={{ antialias: true, alpha: true }}
-      style={{ touchAction: 'none' }}
     >
       <ambientLight intensity={0.7} />
       <directionalLight
@@ -159,7 +158,7 @@ export default function CharacterScene() {
         enableDamping
         dampingFactor={0.05}
         rotateSpeed={0.8}
-        touches={{ ONE: 2, TWO: 0 }}
+        touches={{ ONE: 1, TWO: 0 }}
       />
     </Canvas>
   )
