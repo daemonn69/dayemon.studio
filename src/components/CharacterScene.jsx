@@ -114,6 +114,7 @@ export default function CharacterScene() {
   const [interacting, setInteracting] = useState(false)
 
   return (
+    <div style={{ width: '100%', height: '100%', touchAction: 'none' }}>
     <Canvas
       shadows
       dpr={[1, 2]}
@@ -147,6 +148,7 @@ export default function CharacterScene() {
       </Suspense>
 
       <OrbitControls
+        makeDefault
         enablePan={false}
         enableZoom={false}
         minPolarAngle={Math.PI / 2.8}
@@ -158,8 +160,8 @@ export default function CharacterScene() {
         enableDamping
         dampingFactor={0.05}
         rotateSpeed={0.8}
-        touches={{ ONE: 1, TWO: 0 }}
       />
     </Canvas>
+    </div>
   )
 }
