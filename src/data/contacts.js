@@ -9,7 +9,7 @@ export const contacts = [
   },
   {
     label: 'Instagram',
-    value: 'интсы нету простите',
+    value: 'инсты нету',
     href: 'https://instagram.com/',
     icon: Instagram,
   },
