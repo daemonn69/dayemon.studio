@@ -1,0 +1,127 @@
+import { useEffect, useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
+
+const skills = [
+  'Blender',
+  'Sculpting',
+  'Hard-Surface',
+  'Texturing',
+  'Lighting',
+  'Rigging',
+  'Animation',
+  'Substance Painter',
+  'Cycles',
+  'Eevee',
+]
+
+function AnimatedNumber({ value, duration = 1200 }) {
+  // supports values like "3+", "50+"
+  const match = String(value).match(/(\d+)(.*)/)
+  const target = match ? parseInt(match[1], 10) : 0
+  const suffix = match ? match[2] : ''
+  const [n, setN] = useState(0)
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  useEffect(() => {
+    if (!inView) return
+    let raf
+    const start = performance.now()
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration)
+      const eased = 1 - Math.pow(1 - t, 3)
+      setN(Math.round(eased * target))
+      if (t < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [inView, target, duration])
+
+  return (
+    <span ref={ref}>
+      {n}
+      {suffix}
+    </span>
+  )
+}
+
+export default function About() {
+  return (
+    <section id="about" className="relative py-24 sm:py-32">
+      <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="card relative overflow-hidden p-6 sm:p-8 lg:p-10"
+        >
+          <div className="absolute -right-10 -top-10 h-44 w-44 animate-blob rounded-full bg-pink/40 blur-2xl" />
+          <div className="absolute -left-10 -bottom-10 h-44 w-44 animate-blob-2 rounded-full bg-primary/30 blur-2xl" />
+
+          <span className="chip">Обо мне</span>
+          <h3 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-black leading-[1] tracking-[-0.02em]">
+            Привет, я <span className="gradient-text">3D-художник</span>
+          </h3>
+          <p className="mt-4 text-sm text-muted sm:text-base">
+            Уже несколько лет работаю в Blender — делаю стилизованных персонажей, уютные
+            окружения и продуктовые рендеры. Люблю чистые силуэты, тёплый свет и характер
+            в каждой детали.
+          </p>
+          <p className="mt-3 text-sm text-muted sm:text-base">
+            Открыт к фрилансу, коллабам и интересным проектам. Если у тебя есть идея —
+            напиши, обсудим.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="grid gap-5"
+        >
+          <div className="card p-5 sm:p-6">
+            <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[11px]">
+              Навыки
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
+              {skills.map((s, i) => (
+                <motion.span
+                  key={s}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.03 }}
+                  className="cursor-default rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-ink/8 transition hover:-translate-y-0.5 hover:bg-primary/10 hover:ring-primary/30 sm:px-3 sm:py-1.5 sm:text-sm"
+                >
+                  {s}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+
+          {/* stats */}
+          <div className="grid grid-cols-3 divide-x divide-ink/10 px-2 py-2">
+            <Stat value="2+" label="года в 3D" />
+            <Stat value="20+" label="работ" />
+            <Stat value="2+" label="клиентов" />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function Stat({ value, label }) {
+  return (
+    <div className="px-2 text-center sm:px-3">
+      <div className="font-display text-3xl font-black tracking-tight text-ink sm:text-4xl lg:text-5xl">
+        <AnimatedNumber value={value} />
+      </div>
+      <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted sm:mt-1.5 sm:text-[11px] sm:tracking-[0.16em]">
+        {label}
+      </div>
+    </div>
+  )
+}
