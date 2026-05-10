@@ -9,24 +9,25 @@ import Footer from './components/Footer.jsx'
 export default function App() {
   return (
     <div className="grain relative min-h-[100dvh] overflow-x-hidden">
-      {/* ambient layers — multiple blobs + dot grid for depth */}
+      {/* ambient layers — blobs только на десктопе, dot grid везде */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-primary/20 blur-[120px] animate-blob" />
-        <div className="absolute top-[30%] left-[-15%] h-[480px] w-[480px] rounded-full bg-pink/30 blur-[130px] animate-blob-2" />
-        <div className="absolute bottom-[-10%] right-[20%] h-[420px] w-[420px] rounded-full bg-mint/40 blur-[120px] animate-blob" style={{ animationDelay: '-6s' }} />
-        <div className="absolute top-[55%] right-[-5%] h-[360px] w-[360px] rounded-full bg-cream/50 blur-[110px] animate-blob-2" style={{ animationDelay: '-10s' }} />
+        <div className="absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-primary/20 blur-[120px] hidden sm:block animate-blob" />
+        <div className="absolute top-[30%] left-[-15%] h-[480px] w-[480px] rounded-full bg-pink/30 blur-[130px] hidden sm:block animate-blob-2" />
+        <div className="absolute bottom-[-10%] right-[20%] h-[420px] w-[420px] rounded-full bg-mint/40 blur-[120px] hidden sm:block animate-blob" style={{ animationDelay: '-6s' }} />
+        <div className="absolute top-[55%] right-[-5%] h-[360px] w-[360px] rounded-full bg-cream/50 blur-[110px] hidden sm:block animate-blob-2" style={{ animationDelay: '-10s' }} />
 
-        {/* subtle dot grid layer */}
+        {/* на мобиле — статичные блобы без анимации */}
+        <div className="absolute -top-40 right-[-10%] h-[400px] w-[400px] rounded-full bg-primary/15 blur-[100px] sm:hidden" />
+        <div className="absolute bottom-[-10%] left-[-10%] h-[350px] w-[350px] rounded-full bg-pink/20 blur-[100px] sm:hidden" />
+
+        {/* dot grid */}
         <div
           className="absolute inset-0 opacity-[0.35]"
           style={{
-            backgroundImage:
-              'radial-gradient(rgba(27,18,48,0.10) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(rgba(27,18,48,0.10) 1px, transparent 1px)',
             backgroundSize: '22px 22px',
-            maskImage:
-              'radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 80%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 80%)',
+            maskImage: 'radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 80%)',
           }}
         />
       </div>

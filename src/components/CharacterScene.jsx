@@ -112,25 +112,27 @@ function Loader() {
 
 export default function CharacterScene() {
   const [interacting, setInteracting] = useState(false)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   return (
     <div style={{ width: '100%', height: '100%', touchAction: 'none' }}>
     <Canvas
-      shadows
-      dpr={[1, 2]}
+      shadows={!isMobile}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
       camera={{ position: [0, 0.5, 6], fov: 38 }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
+      frameloop="demand"
     >
-      <ambientLight intensity={0.7} />
+      <ambientLight intensity={0.8} />
       <directionalLight
         position={[4, 6, 4]}
         intensity={1.5}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        castShadow={!isMobile}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
       />
       <directionalLight position={[-3, 2, -2]} intensity={0.5} color="#ffb4d9" />
-      <pointLight position={[0, 4, 0]} intensity={0.3} color="#b57bff" />
+      {!isMobile && <pointLight position={[0, 4, 0]} intensity={0.3} color="#b57bff" />}
 
       <Suspense fallback={<Loader />}>
         <Float speed={1.1} rotationIntensity={0.08} floatIntensity={0.2}>
@@ -138,9 +140,9 @@ export default function CharacterScene() {
         </Float>
         <ContactShadows
           position={[0, -1.9, 0]}
-          opacity={0.35}
+          opacity={isMobile ? 0.2 : 0.35}
           scale={8}
-          blur={2.6}
+          blur={isMobile ? 1.5 : 2.6}
           far={3}
           color="#1b1230"
         />
