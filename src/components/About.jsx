@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 const skills = [
   'Blender',
@@ -42,7 +43,7 @@ function AnimatedNumber({ value, duration = 1200 }) {
 }
 
 export default function About() {
-  // На мобиле убираем x-анимации (они вызывают reflow)
+  const { t } = useLang()
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   return (
@@ -55,25 +56,20 @@ export default function About() {
           transition={{ duration: 0.5 }}
           className="card relative overflow-hidden p-6 sm:p-8 lg:p-10"
         >
-          {/* blob-анимации только на десктопе */}
           <div className="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-pink/40 blur-2xl hidden sm:block animate-blob" />
           <div className="absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-primary/30 blur-2xl hidden sm:block animate-blob-2" />
-          {/* статичные на мобиле */}
           <div className="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-pink/30 blur-2xl sm:hidden" />
           <div className="absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-primary/20 blur-2xl sm:hidden" />
 
-          <span className="chip">Обо мне</span>
+          <span className="chip">{t('about.chip')}</span>
           <h3 className="mt-3 font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-black leading-[1] tracking-[-0.02em]">
-            Привет, я <span className="gradient-text">3D-художник</span>
+            {t('about.heading1')} <span className="gradient-text">{t('about.heading2')}</span>
           </h3>
           <p className="mt-4 text-sm text-muted sm:text-base">
-            Уже несколько лет работаю в Blender — делаю стилизованных персонажей, уютные
-            окружения и продуктовые рендеры. Люблю чистые силуэты, тёплый свет и характер
-            в каждой детали.
+            {t('about.bio1')}
           </p>
           <p className="mt-3 text-sm text-muted sm:text-base">
-            Открыт к фрилансу, коллабам и интересным проектам. Если у тебя есть идея —
-            напиши, обсудим.
+            {t('about.bio2')}
           </p>
         </motion.div>
 
@@ -86,12 +82,11 @@ export default function About() {
         >
           <div className="card p-5 sm:p-6">
             <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[11px]">
-              Навыки
+              {t('about.skillsLabel')}
             </div>
             <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
               {skills.map((s, i) => (
                 isMobile ? (
-                  // На мобиле — без анимации каждого тега
                   <span
                     key={s}
                     className="cursor-default rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-ink/8 sm:px-3 sm:py-1.5 sm:text-sm"
@@ -115,9 +110,9 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-3 divide-x divide-ink/10 px-2 py-2">
-            <Stat value="2+" label="года в 3D" />
-            <Stat value="20+" label="работ" />
-            <Stat value="2+" label="клиентов" />
+            <Stat value="2+" label={t('about.stat1Label')} />
+            <Stat value="20+" label={t('about.stat2Label')} />
+            <Stat value="2+" label={t('about.stat3Label')} />
           </div>
         </motion.div>
       </div>

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
-
-const links = [
-  { href: '#home', label: 'Главная' },
-  { href: '#works', label: 'Работы' },
-  { href: '#about', label: 'Обо мне' },
-  { href: '#contact', label: 'Контакты' },
-]
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 export default function Navbar() {
+  const { lang, toggle, t } = useLang()
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState('#home')
+
+  const links = [
+    { href: '#home', label: t('nav.home') },
+    { href: '#works', label: t('nav.works') },
+    { href: '#about', label: t('nav.about') },
+    { href: '#contact', label: t('nav.contact') },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16)
@@ -19,7 +21,7 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    const ids = links.map((l) => l.href.slice(1))
+    const ids = ['home', 'works', 'about', 'contact']
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -74,6 +76,15 @@ export default function Navbar() {
             )
           })}
         </ul>
+
+        {/* Language toggle */}
+        <button
+          onClick={toggle}
+          aria-label="Switch language"
+          className="ml-1 rounded-full px-2.5 py-1.5 text-xs font-bold text-ink/60 ring-1 ring-ink/10 transition hover:bg-white hover:text-ink hover:shadow-sm sm:ml-2 sm:px-3 sm:py-2 sm:text-sm"
+        >
+          {lang === 'en' ? 'RU' : 'EN'}
+        </button>
       </nav>
     </header>
   )

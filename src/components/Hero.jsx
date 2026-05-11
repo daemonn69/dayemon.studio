@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, MousePointer2, Palette, Box } from 'lucide-react'
 import CharacterScene from './CharacterScene.jsx'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 export default function Hero() {
+  const { t } = useLang()
+
   return (
     <section
       id="home"
@@ -21,32 +24,31 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
             </span>
-            Открыт к проектам
+            {t('hero.chip')}
             <span className="mx-1 h-3 w-px bg-ink/15" />
             <Sparkles size={12} className="text-primary" strokeWidth={2.4} />
-            3D · Blender
+            {t('hero.chipSep')}
           </span>
 
           <h1
             className="mt-6 font-display text-[clamp(3rem,7vw,5.75rem)] font-black leading-[0.9] tracking-[-0.035em] text-ink"
             style={{ textWrap: 'balance' }}
           >
-            Леплю миры <br />
-            и милых{' '}
+            {t('hero.heading1')} <br />
+            {t('hero.heading2')}{' '}
             <span className="relative inline-block">
-              <span className="swash-underline italic">персонажей</span>
+              <span className="swash-underline italic">{t('hero.heading3')}</span>
             </span>
             <span className="gradient-text">.</span>
           </h1>
 
           <p className="mt-7 max-w-[52ch] text-base leading-relaxed text-muted sm:text-lg">
-            Привет! Я крутой 3дшник, а справа мшк канивест — это я в 3D.
-            Делаю стилизованных персонажей, уютные сцены и продуктовые рендеры.
+            {t('hero.description')}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href="#works" className="btn-primary group">
-              Смотреть работы
+              {t('hero.cta')}
               <ArrowRight
                 size={16}
                 strokeWidth={2.2}
@@ -54,13 +56,13 @@ export default function Hero() {
               />
             </a>
             <a href="#contact" className="btn-text">
-              или напиши мне →
+              {t('hero.ctaSecondary')}
             </a>
           </div>
 
           <div className="mt-12 hidden items-center gap-2 text-xs font-medium text-muted/80 sm:flex">
             <MousePointer2 size={13} strokeWidth={2} />
-            Перетаскивай мышью, чтобы покрутить персонажа
+            {t('hero.hint')}
           </div>
         </motion.div>
 
@@ -87,7 +89,7 @@ export default function Hero() {
           >
             <div className="flex items-center gap-2 rounded-full bg-white/85 px-3 py-1.5 text-xs font-semibold text-ink ring-1 ring-ink/5 shadow-soft backdrop-blur">
               <Palette size={13} className="text-primary" />
-              Стилизация
+              {t('hero.bubbleStyle')}
             </div>
           </motion.div>
           <motion.div
@@ -111,7 +113,7 @@ export default function Hero() {
           >
             <div className="flex items-center gap-2 rounded-full bg-white/85 px-3 py-1.5 text-xs font-semibold text-ink ring-1 ring-ink/5 shadow-soft backdrop-blur">
               <Sparkles size={13} className="text-pink" />
-              Cycles
+              {t('hero.bubbleCycles')}
             </div>
           </motion.div>
 

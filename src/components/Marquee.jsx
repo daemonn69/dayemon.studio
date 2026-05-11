@@ -1,3 +1,5 @@
+import { useLang } from '../i18n/LanguageContext.jsx'
+
 const items = [
   'Blender',
   'Sculpting',
@@ -30,8 +32,10 @@ function Row({ reverse = false, muted = false }) {
 }
 
 export default function Marquee() {
+  const { t } = useLang()
+
   return (
-    <section aria-label="Стек инструментов" className="relative py-8 sm:py-10 lg:py-14">
+    <section aria-label={t('marqueeLabel')} className="relative py-8 sm:py-10 lg:py-14">
       <div className="marquee-mask flex flex-col gap-3 overflow-hidden sm:gap-4">
         <div className="flex w-max animate-marquee">
           <Row />

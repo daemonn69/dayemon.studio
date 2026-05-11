@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { contacts } from '../data/contacts.js'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 export default function Contacts() {
+  const { t } = useLang()
+
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="container-x">
@@ -12,13 +15,13 @@ export default function Contacts() {
 
           <div className="relative grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <div>
-              <span className="chip">Контакты</span>
+              <span className="chip">{t('contacts.chip')}</span>
               <h2 className="mt-4 font-display text-[clamp(2rem,4.5vw,3.5rem)] font-black leading-[0.95] tracking-[-0.025em]">
-                Сделаем что-то{' '}
-                <span className="swash-underline italic">крутое</span>?
+                {t('contacts.heading1')}{' '}
+                <span className="swash-underline italic">{t('contacts.heading2')}</span>?
               </h2>
               <p className="mt-4 max-w-md text-sm text-muted sm:text-base">
-                Пиши в любую соцсеть или на почту. Отвечаю в течение дня.
+                {t('contacts.subtitle')}
               </p>
             </div>
 
