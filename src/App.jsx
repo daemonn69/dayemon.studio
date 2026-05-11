@@ -5,8 +5,10 @@ import Gallery from './components/Gallery.jsx'
 import About from './components/About.jsx'
 import Contacts from './components/Contacts.jsx'
 import Footer from './components/Footer.jsx'
+import { LanguageProvider, useLang } from './i18n/LanguageContext.jsx'
 
-export default function App() {
+function AppInner() {
+  const { t } = useLang()
   return (
     <div className="grain relative min-h-[100dvh] overflow-x-hidden">
       {/* ambient layers — blobs только на десктопе, dot grid везде */}
@@ -36,7 +38,7 @@ export default function App() {
         href="#works"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
       >
-        Перейти к работам
+        {t('skipLink')}
       </a>
 
       <Navbar />
@@ -49,5 +51,13 @@ export default function App() {
       </main>
       <Footer />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppInner />
+    </LanguageProvider>
   )
 }

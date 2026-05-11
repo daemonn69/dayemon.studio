@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { X, ImageIcon, ArrowUpRight } from 'lucide-react'
 import { works } from '../data/works.js'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 function PreviewImage({ src, palette = ['#B57BFF', '#FFB4D9'], title }) {
   const [failed, setFailed] = useState(false)
@@ -32,11 +33,15 @@ function PreviewImage({ src, palette = ['#B57BFF', '#FFB4D9'], title }) {
 }
 
 function WorkCard({ w, index, onOpen, isTouch }) {
+  const { lang } = useLang()
   const ref = useRef(null)
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const rX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), { stiffness: 150, damping: 20 })
   const rY = useSpring(useTransform(mx, [-0.5, 0.5], [-5, 5]), { stiffness: 150, damping: 20 })
+
+  const title = lang === 'ru' && w.titleRu ? w.titleRu : w.title
+  const description = lang === 'ru' && w.descriptionRu ? w.descriptionRu : w.description
 
   const onMove = (e) => {
     if (isTouch) return
@@ -51,7 +56,6 @@ function WorkCard({ w, index, onOpen, isTouch }) {
     my.set(0)
   }
 
-  // На тач — простая кнопка без 3D трансформаций
   if (isTouch) {
     return (
       <motion.button
@@ -64,7 +68,7 @@ function WorkCard({ w, index, onOpen, isTouch }) {
       >
         <div className="h-full flex flex-col overflow-hidden rounded-3xl bg-card shadow-[0_1px_0_0_rgba(27,18,48,0.04),0_0_0_1px_rgba(27,18,48,0.05)] active:scale-[0.98] transition-transform duration-150">
           <div className="relative aspect-[4/3] overflow-hidden">
-            <PreviewImage src={w.image} palette={w.palette} title={w.title} />
+            <PreviewImage src={w.image} palette={w.palette} title={title} />
           </div>
           <div className="p-5 flex flex-col flex-1">
             <div className="flex flex-wrap gap-1.5">
@@ -74,8 +78,8 @@ function WorkCard({ w, index, onOpen, isTouch }) {
                 </span>
               ))}
             </div>
-            <h3 className="mt-3 font-display text-xl font-bold tracking-tight">{w.title}</h3>
-            <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">{w.description}</p>
+            <h3 className="mt-3 font-display text-xl font-bold tracking-tight">{title}</h3>
+            <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">{description}</p>
           </div>
         </div>
       </motion.button>
@@ -97,7 +101,7 @@ function WorkCard({ w, index, onOpen, isTouch }) {
     >
       <div className="h-full flex flex-col overflow-hidden rounded-3xl bg-card shadow-[0_1px_0_0_rgba(27,18,48,0.04),0_0_0_1px_rgba(27,18,48,0.05)] transition-shadow duration-300 ease-spring group-hover:shadow-[0_24px_60px_-28px_rgba(70,40,110,0.32),0_0_0_1px_rgba(27,18,48,0.05)]">
         <div className="relative aspect-[4/3] overflow-hidden">
-          <PreviewImage src={w.image} palette={w.palette} title={w.title} />
+          <PreviewImage src={w.image} palette={w.palette} title={title} />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute -inset-y-10 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 transition-all duration-700 group-hover:left-[110%] group-hover:opacity-100" />
@@ -114,8 +118,8 @@ function WorkCard({ w, index, onOpen, isTouch }) {
               </span>
             ))}
           </div>
-          <h3 className="mt-3 font-display text-xl font-bold tracking-tight transition group-hover:text-primaryDark">{w.title}</h3>
-          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">{w.description}</p>
+          <h3 className="mt-3 font-display text-xl font-bold tracking-tight transition group-hover:text-primaryDark">{title}</h3>
+          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">{description}</p>
         </div>
       </div>
     </motion.button>
@@ -123,6 +127,7 @@ function WorkCard({ w, index, onOpen, isTouch }) {
 }
 
 export default function Gallery() {
+  const { t, lang } = useLang()
   const [active, setActive] = useState(null)
   const [isTouch, setIsTouch] = useState(false)
 
@@ -130,19 +135,21 @@ export default function Gallery() {
     setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0)
   }, [])
 
+  const activeTitle = active && lang === 'ru' && active.titleRu ? active.titleRu : active?.title
+  const activeDesc = active && lang === 'ru' && active.descriptionRu ? active.descriptionRu : active?.description
+
   return (
     <section id="works" className="relative py-24 sm:py-32">
       <div className="container-x">
         <div className="flex items-end justify-between gap-6">
           <div>
-            <span className="chip">Портфолио</span>
+            <span className="chip">{t('gallery.chip')}</span>
             <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-black leading-[0.95] tracking-[-0.025em]">
-              Избранные <span className="gradient-text">работы</span>
+              {t('gallery.heading1')} <span className="gradient-text">{t('gallery.heading2')}</span>
             </h2>
           </div>
           <p className="hidden max-w-sm text-sm leading-relaxed text-muted md:block">
-            Стилизованные сцены, персонажи и продуктовые рендеры. Кликай по карточке,
-            чтобы посмотреть подробнее.
+            {t('gallery.subtitle')}
           </p>
         </div>
 
@@ -177,27 +184,27 @@ export default function Gallery() {
               <button
                 onClick={() => setActive(null)}
                 className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/90 text-ink ring-1 ring-ink/10 hover:bg-white"
-                aria-label="Закрыть"
+                aria-label={t('gallery.close')}
               >
                 <X size={18} />
               </button>
               <div className="flex items-center justify-center bg-bg p-4 sm:p-8">
                 <img
                   src={active.image}
-                  alt={active.title}
+                  alt={activeTitle}
                   className="max-h-[65vh] w-auto max-w-full rounded-xl object-contain"
                 />
               </div>
               <div className="p-5 sm:p-6">
                 <div className="flex flex-wrap gap-1.5">
-                  {active.tags.map((t) => (
-                    <span key={t} className="rounded-full bg-bg px-2.5 py-0.5 text-xs font-semibold text-muted">
-                      {t}
+                  {active.tags.map((tag) => (
+                    <span key={tag} className="rounded-full bg-bg px-2.5 py-0.5 text-xs font-semibold text-muted">
+                      {tag}
                     </span>
                   ))}
                 </div>
-                <h3 className="mt-3 font-display text-xl font-bold sm:text-2xl">{active.title}</h3>
-                <p className="mt-2 text-sm text-muted sm:text-base">{active.description}</p>
+                <h3 className="mt-3 font-display text-xl font-bold sm:text-2xl">{activeTitle}</h3>
+                <p className="mt-2 text-sm text-muted sm:text-base">{activeDesc}</p>
               </div>
             </motion.div>
           </motion.div>
